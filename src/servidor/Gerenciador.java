@@ -19,7 +19,7 @@ public class Gerenciador {
 		pessoas = new HashMap<>();
 	}
 	
-	public boolean ofertar(Leilao leilao, Oferta oferta) {
+	public boolean ofertar(Leilao leilao, Oferta oferta) throws Exception {
 		if(!leilao.getMelhorOferta().isPresent()) {
 			leilao.setMelhorOferta(oferta);
 			return true;
@@ -31,7 +31,7 @@ public class Gerenciador {
 		return false;
 	}
 	
-	public boolean vender(Leilao leilao) {
+	public boolean vender(Leilao leilao) throws Exception {
 		if(leilao.vender()) {
 			leiloes.remove(leilao);
 			return true;
