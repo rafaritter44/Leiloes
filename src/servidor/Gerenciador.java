@@ -13,10 +13,12 @@ public class Gerenciador {
 	
 	private List<Leilao> leiloes;
 	private Map<Integer, Pessoa> pessoas;
+	private static double receitaDaEmpresa;
 	
 	public Gerenciador() {
 		leiloes = new ArrayList<>();
 		pessoas = new HashMap<>();
+		receitaDaEmpresa = 0;
 	}
 	
 	public boolean ofertar(Leilao leilao, Oferta oferta) throws Exception {
@@ -31,12 +33,19 @@ public class Gerenciador {
 		return false;
 	}
 	
-	public boolean vender(Leilao leilao) throws Exception {
-		if(leilao.vender()) {
+	public String vender(Leilao leilao) {
+		try {
+			leilao.vender();
 			leiloes.remove(leilao);
-			return true;
+			return "Vendido para " + leilao.getMelhorOferta().get().getComprador().getNome();
+		} catch(Exception excecao) {
+			return excecao.getMessage();
 		}
-		return false;
+	}
+	
+	public boolean encerraLeilao() {
+		//TODO
+		return true;
 	}
 	
 	public void addLeilao(Leilao leilao) {
@@ -45,6 +54,14 @@ public class Gerenciador {
 	
 	public void addPessoa(Pessoa pessoa) {
 		pessoas.put(pessoa.getId(), pessoa);
+	}
+	
+	public static double getReceitaDaEmpresa() {
+		return receitaDaEmpresa;
+	}
+	
+	public static void depositaTaxaDeVenda(double valor) {
+		receitaDaEmpresa += valor;
 	}
 
 }
