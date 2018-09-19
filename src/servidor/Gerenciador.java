@@ -43,9 +43,14 @@ public class Gerenciador {
 		}
 	}
 	
-	public boolean encerraLeilao() {
-		//TODO
-		return true;
+	public boolean encerraLeilao(int id) {
+		for(int i=0; i<leiloes.size(); i++) {
+			if(leiloes.get(i).getId() == id) {
+				leiloes.remove(i);
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public void addLeilao(Leilao leilao) {

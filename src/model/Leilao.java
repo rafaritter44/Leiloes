@@ -8,6 +8,7 @@ import servidor.Gerenciador;
 
 public class Leilao {
 
+	private int id;
 	private Pessoa vendedor;
 	private Produto produto;
 	private Optional<Oferta> melhorOferta;
@@ -15,7 +16,8 @@ public class Leilao {
 	private static final int TEMPO_LIMITE = 5;
 	private static final double TAXA_DE_VENDA = 0.05;
 	
-	public Leilao(Pessoa vendedor, Produto produto) {
+	public Leilao(int id, Pessoa vendedor, Produto produto) {
+		this.id = id;
 		this.vendedor = vendedor;
 		this.produto = produto;
 		produto.setEmLeilao(true);
@@ -43,6 +45,7 @@ public class Leilao {
 			throw new Exception("ERRO - O vendedor não possui esse produto");
 	}
 	
+	public int getId() { return id; }
 	public Pessoa getVendedor() { return vendedor; }
 	public Produto getProduto() { return produto; }
 	public Optional<Oferta> getMelhorOferta() { return melhorOferta; }
