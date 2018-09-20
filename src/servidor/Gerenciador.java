@@ -12,7 +12,7 @@ import model.Pessoa;
 public class Gerenciador {
 	
 	private List<Leilao> leiloes;
-	private Map<Integer, Pessoa> pessoas;
+	private Map<String, Pessoa> pessoas;
 	private static double receitaDaEmpresa;
 	
 	public Gerenciador() {
@@ -58,7 +58,7 @@ public class Gerenciador {
 	}
 	
 	public void addPessoa(Pessoa pessoa) {
-		pessoas.put(pessoa.getId(), pessoa);
+		pessoas.put(pessoa.getUsername(), pessoa);
 	}
 	
 	public static double getReceitaDaEmpresa() {

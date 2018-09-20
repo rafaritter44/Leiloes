@@ -5,14 +5,14 @@ import java.util.List;
 
 public class Pessoa {
 	
-	private int id;
+	private String username;
 	private String nome;
 	private List<Produto> produtos;
 	private double saldo;
 	private CartaoDeCredito cartaoDeCredito;
 	
-	public Pessoa(int id, String nome, double saldo, CartaoDeCredito cartaoDeCredito) {
-		this.id = id;
+	public Pessoa(String username, String nome, double saldo, CartaoDeCredito cartaoDeCredito) {
+		this.username = username;
 		this.nome = nome;
 		produtos = new ArrayList<>();
 		this.saldo = saldo;
@@ -21,14 +21,14 @@ public class Pessoa {
 	
 	public void addProduto(Produto produto) {
 		produtos.add(produto);
-		produto.setIdDono(id);
+		produto.setIdDono(username);
 	}
 	
 	public boolean removeProduto(Produto produto) {
 		return produtos.remove(produto);
 	}
 	
-	public int getId() { return id; }
+	public String getUsername() { return username; }
 	public String getNome() { return nome; }
 	public double getSaldo() { return saldo; }
 	
