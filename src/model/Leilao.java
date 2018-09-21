@@ -15,6 +15,7 @@ public class Leilao implements Serializable {
 	public Oferta melhorOferta;
 	private LocalDateTime horaInicial;
 	public String status;
+	public LocalDateTime horaFinal;
 	private static final int TEMPO_LIMITE = 5;
 	private static final double TAXA_DE_VENDA = 0.05;
 	private static int contador = 1;
@@ -29,21 +30,23 @@ public class Leilao implements Serializable {
 		produto.idLeilao = id;
 		melhorOferta = null;
 		horaInicial = LocalDateTime.now();
+		horaFinal = horaInicial.plusMinutes(TEMPO_LIMITE); 
 	}
 	
 	public long tempoRestante() {
-		return ChronoUnit.MINUTES.between(horaInicial, LocalDateTime.now());
+		
+		return ChronoUnit.MINUTES.between(LocalDateTime.now(), horaFinal);
 	}
 	
 	public boolean tempoEsgotado() {
-		 return tempoRestante() > TEMPO_LIMITE;
+		 return tempoRestante() < 0;
 	}
 	
 	public void vender() throws Exception {
 		if(tempoEsgotado())
-			throw new Exception("Tempo de leil�o esgotado");
+			throw new Exception("Tempo de leilao esgotado");
 		if(melhorOferta == null)
-			throw new Exception("Nenhuma oferta realizada at� o momento");
+			throw new Exception("Nenhuma oferta realizada ate o momento");
 		if(vendedor.removeProduto(produto)) {
 			Oferta ofertaVencedora = melhorOferta;
 			ofertaVencedora.getComprador().addProduto(produto);
@@ -52,7 +55,7 @@ public class Leilao implements Serializable {
 			vendedor.recebe(valorDaVenda - pagamentoPraEmpresa);
 			Gerenciador.depositaTaxaDeVenda(pagamentoPraEmpresa);
 		} else
-			throw new Exception("ERRO - O vendedor n�o possui esse produto");
+			throw new Exception("ERRO - O vendedor nao possui esse produto");
 	}
 	
 	public int getId() { return id; }
@@ -63,7 +66,7 @@ public class Leilao implements Serializable {
 	
 	public void setMelhorOferta(Oferta oferta) throws Exception {
 		if(tempoEsgotado())
-			throw new Exception("Tempo de leil�o esgotado");
+			throw new Exception("Tempo de leilao esgotado");
 		melhorOferta = oferta;
 	}
 

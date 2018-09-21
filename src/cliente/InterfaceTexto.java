@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -281,9 +282,58 @@ public class InterfaceTexto {
 		if (leilao.melhorOferta == null) {
 			System.out.println("Sem ofertas ate o momento");
 		} else {
-			System.out.println(leilao.getMelhorOferta());
+			System.out.println("R$ " + leilao.getMelhorOferta().getValor());
 		}
 		System.out.println("--------------------------------------------");
+		
+		while(true){
+			os.reset();
+			System.out.println("\n--- Selecione uma opção: "
+					+ "\n1) Recarregar Dados"
+					+ "\n2) Finalizar Leilao"
+					+ "\n9) Menu Principal");
+
+			System.out.print("> ");
+			opcaoString = in.nextLine();
+			
+			while(!StringUtils.isNumeric(opcaoString)){
+				System.out.println("--- ERRO: Insira somente o numero da opcao ---");
+				System.out.print("> ");
+				opcaoString = in.nextLine();
+			}
+			
+			opcaoInt = Integer.parseInt(opcaoString);
+			
+			if(opcaoInt == 1){
+				om = new Mensagem("OpcaoDetalhes", username, "1");
+				os.writeObject(om);
+				
+				leilao = (Leilao) is.readObject();
+				
+				System.out.print("\n--- DETALHES DO LEILAO ---\n"
+						+ "Hora atual: " + LocalDateTime.now()
+						+ "\n--------------------------------------------"
+						+ "\n--- Produto: " + p.getNome()
+						+ "\n--- Hora inicial: " + leilao.getHoraInicial()
+						+ "\n--- Hora final: " + leilao.horaFinal
+						+ "\n--- Tempo Restante (minutos): " + leilao.tempoRestante()
+						+ "\n--- Melhor Oferta: ");
+				
+				if (leilao.melhorOferta == null) {
+					System.out.println("Sem ofertas ate o momento");
+				} else {
+					System.out.println("R$ " + leilao.getMelhorOferta().getValor());
+				}
+				System.out.println("--------------------------------------------");
+			}
+			else if(opcaoInt == 2){
+				om = new Mensagem("OpcaoDetalhes", username, "2");
+			}
+			else if(opcaoInt == 9){
+				om = new Mensagem("OpcaoDetalhes", username, "9");
+				break;
+			}
+		}
 	}
 	
 	public void comprarProduto() {

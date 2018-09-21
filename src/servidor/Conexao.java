@@ -117,6 +117,19 @@ public class Conexao extends Thread {
                 	Leilao leilaoEnviado = g.leiloes.get(opcaoInt);
                 	os.writeObject(leilaoEnviado);
                 	
+                	while(true) {
+                		os.reset();
+                		Mensagem opcaoDetalhes = (Mensagem) is.readObject();
+                		if (opcaoDetalhes.args.equals("1")) {
+                			leilaoEnviado = g.leiloes.get(opcaoInt);
+                			os.writeObject(leilaoEnviado);
+                		} else if (opcaoDetalhes.args.equals("2")) {
+                			// TODO: Encerrar Leilao
+                		} else if (opcaoDetalhes.args.equals("9")) {
+                			break;
+                		}
+                	}
+                	
                 	break;
                 }
             }
