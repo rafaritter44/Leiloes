@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.HashMap;
 
+import model.Leilao;
 import model.Mensagem;
 import model.Pessoa;
 import model.Produto;
@@ -61,7 +63,7 @@ public class Conexao extends Thread {
                 switch (im.operacao) {
                 case "ConsultarConta":
                 	Pessoa om = g.pessoas.get(username);
-                	System.out.println("Respondendo Objeto: " + om);
+//                	System.out.println("Respondendo Objeto: " + om);
                 	os.writeObject(om);
                 	break;
                 	
@@ -69,6 +71,38 @@ public class Conexao extends Thread {
                 	Produto produtoAdicionado = (Produto) is.readObject();
 //                	System.out.println("Adicionando produto: " + produtoAdicionado);
                 	g.pessoas.get(username).addProduto(produtoAdicionado);
+                	break;
+                
+                case "VenderProduto":
+               	   	Pessoa vendedor = g.pessoas.get(username);
+                	os.writeObject(vendedor);
+                	
+            		HashMap<Integer, Produto> mapaProdutos = new HashMap<Integer, Produto>();
+            		for(Produto p : vendedor.produtos) {
+            			mapaProdutos.put(p.getId(), p);
+            		}
+
+            		Mensagem msgVenda = (Mensagem) is.readObject();
+            		int idVenda = Integer.parseInt(msgVenda.args);
+            		
+            		if (mapaProdutos.get(idVenda) == null) {
+            			msgVenda = new Mensagem("resultadoVenda", username, "ProdutoInexistente");
+            			os.writeObject(msgVenda);
+            			break;
+            		}
+            		
+            		Produto produtoVendido = mapaProdutos.get(idVenda);
+            		if (produtoVendido.estaAVenda()) {
+            			msgVenda = new Mensagem("resultadoVenda", username, "ProdutoAVenda");
+            			os.writeObject(msgVenda);
+            			break;
+            		}
+            		
+            		Leilao novoLeilao = new Leilao(idVenda, vendedor, produtoVendido);
+            		g.addLeilao(novoLeilao);
+            		msgVenda = new Mensagem("resultadoVenda", username, "true");
+            		os.writeObject(msgVenda);
+                	break;
                 }
             }
         } catch (IOException | ClassNotFoundException e) {

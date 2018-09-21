@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Path;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
@@ -70,7 +72,7 @@ public class InterfaceTexto {
 			
 			while(!StringUtils.isNumeric(opcaoString)){
 				System.out.println("--- ERRO: Insira somente o numero da opcao ---");
-				System.out.print(">");
+				System.out.print("> ");
 				opcaoString = in.nextLine();
 			}
 			
@@ -109,7 +111,7 @@ public class InterfaceTexto {
 		Mensagem om = new Mensagem("ConsultarConta", username, "");
 		os.writeObject(om);
 		Pessoa im = (Pessoa) is.readObject();
-		System.out.println("Recebido: " + im);
+//		System.out.println("Recebido: " + im);
 		
 		System.out.println("\n--- CONTA DO USUARIO ---"
 				+ "\n--------------------------------------------"
@@ -131,6 +133,9 @@ public class InterfaceTexto {
 			System.out.println("Usuario nao possui nenhum produto");
 		} else {
 			for(Produto p : im.produtos) {
+				if(p.estaAVenda()) {
+					System.out.print("[VENDA]\t");
+				}
 				System.out.println(p.getNome());
 			}
 		}
@@ -152,8 +157,62 @@ public class InterfaceTexto {
 		os.writeObject(p);
 	}
 	
-	public void venderProduto() {
+	public void venderProduto() throws IOException, ClassNotFoundException {
+		Mensagem om = new Mensagem("VenderProduto", username, "");
+		os.writeObject(om);
+		Pessoa vendedor = (Pessoa) is.readObject();
+
+		if(vendedor.produtos.isEmpty()) {
+			System.out.println("xxx ERRO: Usuario nao possui nenhum produto xxx");
+			return;
+		} else {
+			Collections.sort(vendedor.produtos);
+		}
+
+		HashMap<Integer, Produto> mapaProdutos = new HashMap<Integer, Produto>();
+		System.out.println("\n--- PRODUTOS ---"
+				+ "\n--------------------------------------------");
+
+		for(Produto p : vendedor.produtos) {
+			if(p.estaAVenda()) {
+				System.out.print("[VENDA]");
+			} else {
+				System.out.print(p.getId());
+			}
+			System.out.println("\t" + p.getNome());
+			mapaProdutos.put(p.getId(), p);
+		}
 		
+		System.out.println("--------------------------------------------\n"
+				+ "Digite o ID do produto para vender ou 0 para retornar:");
+		
+		System.out.print("> ");
+		String opcaoString = in.nextLine();
+		
+		while(!StringUtils.isNumeric(opcaoString)){
+			System.out.println("--- ERRO: Insira somente o numero do produto ---");
+			System.out.print("> ");
+			opcaoString = in.nextLine();
+		}
+		
+		om = new Mensagem("IdVenda", username, opcaoString);
+		os.writeObject(om);
+		
+		Mensagem im = (Mensagem) is.readObject();
+		
+		int opcaoInt = Integer.parseInt(opcaoString);
+		if (opcaoInt == 0) {
+			System.out.println("\n--- Cancelado - Retornando ao Menu Principal ---");
+			return;
+		}
+		
+		if (im.args.equals("true")) {
+			System.out.println("--- Leilao de Venda criado com sucesso ---");
+		} else if (im.args.equals("ProdutoAVenda")){
+			System.out.println("--- ERRO: O produto ja esta a venda ---");
+		} else if (im.args.equals("ProdutoInexistente")){
+			System.out.println("--- ERRO: Codigo de Produto Invalido ---");
+		}
 	}
 	
 	public void acompanharVendas() {

@@ -2,7 +2,7 @@ package model;
 
 import java.io.Serializable;
 
-public class Produto implements Serializable {
+public class Produto implements Serializable, Comparable<Produto> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -26,6 +26,10 @@ public class Produto implements Serializable {
 	public boolean estaAVenda() { return emLeilao; }
 	public void setEmLeilao(boolean emLeilao) { this.emLeilao = emLeilao; }
 
+	public int compareTo(Produto outro) {
+        return Integer.compare(this.id, outro.id);
+    }
+	
 	@Override
 	public String toString() {
 		return "Produto [id=" + id + ", nome=" + nome + ", idDono=" + idDono + ", emLeilao=" + emLeilao + "]";
