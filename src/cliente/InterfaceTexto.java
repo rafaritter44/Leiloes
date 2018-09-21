@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -11,6 +13,7 @@ import java.util.Scanner;
 import org.apache.commons.lang3.StringUtils;
 
 import model.CartaoDeCredito;
+import model.Leilao;
 import model.Mensagem;
 import model.Pessoa;
 import model.Produto;
@@ -215,8 +218,72 @@ public class InterfaceTexto {
 		}
 	}
 	
-	public void acompanharVendas() {
+	public void acompanharVendas() throws IOException, ClassNotFoundException {
+		Mensagem om = new Mensagem("AcompanharVendas", username, "");
+		os.writeObject(om);
+		Pessoa vendedor = (Pessoa) is.readObject();
 		
+		ArrayList<Produto> aVenda = new ArrayList<Produto>();
+		for (Produto p : vendedor.produtos) {
+			if (p.estaAVenda()) {
+				aVenda.add(p);
+			}
+		}
+
+		HashMap<Integer, Produto> mapaProdutos = new HashMap<Integer, Produto>();
+		Collections.sort(aVenda);
+		System.out.println("\n--- PRODUTOS A VENDA ---"
+				+ "\n--------------------------------------------");
+
+		for(Produto p : aVenda) {
+			System.out.println(p.getId() + "\t" + p.getNome());
+			mapaProdutos.put(p.getId(), p);
+		}
+		
+		System.out.println("--------------------------------------------\n"
+				+ "Digite o ID do produto para detalhes:");
+		
+		System.out.print("> ");
+		String opcaoString = in.nextLine();
+		
+		while(!StringUtils.isNumeric(opcaoString)){
+			System.out.println("--- ERRO: Insira somente o numero do produto ---");
+			System.out.print("> ");
+			opcaoString = in.nextLine();
+		}
+		
+		int opcaoInt = Integer.parseInt(opcaoString);
+		if (opcaoInt == 0) {
+			System.out.println("\n--- Cancelado - Retornando ao Menu Principal ---");
+			om = new Mensagem("SolicitaLeilao", username, "0");
+			os.writeObject(om);
+			return;
+		} else if (mapaProdutos.get(opcaoInt) == null) {
+			System.out.println("\n--- ERRO: Produto nao encontrado ---");
+			om = new Mensagem("SolicitaLeilao", username, "0");
+			os.writeObject(om);
+			return;
+		}
+		
+		Produto p = mapaProdutos.get(opcaoInt);
+		om = new Mensagem("SolicitaLeilao", username, Integer.toString(p.idLeilao));
+		os.writeObject(om);
+		Leilao leilao = (Leilao) is.readObject();
+		
+		System.out.print("\n--- DETALHES DO LEILAO ---\n"
+				+ "Hora atual: " + LocalDateTime.now()
+				+ "\n--------------------------------------------"
+				+ "\n--- Produto: " + p.getNome()
+				+ "\n--- Hora inicial: " + leilao.getHoraInicial()
+				+ "\n--- Tempo Restante (minutos): " + leilao.tempoRestante()
+				+ "\n--- Melhor Oferta: ");
+		
+		if (leilao.melhorOferta == null) {
+			System.out.println("Sem ofertas ate o momento");
+		} else {
+			System.out.println(leilao.getMelhorOferta());
+		}
+		System.out.println("--------------------------------------------");
 	}
 	
 	public void comprarProduto() {

@@ -98,10 +98,25 @@ public class Conexao extends Thread {
             			break;
             		}
             		
-            		Leilao novoLeilao = new Leilao(idVenda, vendedor, produtoVendido);
-            		g.addLeilao(novoLeilao);
+            		Leilao novoLeilao = new Leilao(vendedor, produtoVendido);
+            		g.addLeilao(novoLeilao.getId(), novoLeilao);
             		msgVenda = new Mensagem("resultadoVenda", username, "true");
             		os.writeObject(msgVenda);
+                	break;
+                	
+                case "AcompanharVendas":
+                	Pessoa usuario = g.pessoas.get(username);
+                	os.writeObject(usuario);
+                	
+                	Mensagem pedidoLeilao = (Mensagem) is.readObject();
+                	Integer opcaoInt = Integer.parseInt(pedidoLeilao.args);
+                	if(opcaoInt == 0) {
+                		break;
+                	}
+                	
+                	Leilao leilaoEnviado = g.leiloes.get(opcaoInt);
+                	os.writeObject(leilaoEnviado);
+                	
                 	break;
                 }
             }

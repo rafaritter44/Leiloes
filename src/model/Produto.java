@@ -11,6 +11,7 @@ public class Produto implements Serializable, Comparable<Produto> {
 	private String idDono;
 	private boolean emLeilao;
 	private static int contador = 1;
+	public int idLeilao;
 	
 	public Produto(String nome) {
 		setNome(nome);

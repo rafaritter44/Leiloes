@@ -1,8 +1,6 @@
 package servidor;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import model.Leilao;
@@ -11,22 +9,22 @@ import model.Pessoa;
 
 public class Gerenciador {
 	
-	public List<Leilao> leiloes;
+	public Map<Integer, Leilao> leiloes;
 	public Map<String, Pessoa> pessoas;
 	private static double receitaDaEmpresa;
 	
 	public Gerenciador() {
-		leiloes = new ArrayList<>();
+		leiloes = new HashMap<>();
 		pessoas = new HashMap<>();
 		receitaDaEmpresa = 0;
 	}
 	
 	public boolean ofertar(Leilao leilao, Oferta oferta) throws Exception {
-		if(!leilao.getMelhorOferta().isPresent()) {
+		if(leilao.melhorOferta == null) {
 			leilao.setMelhorOferta(oferta);
 			return true;
 		}
-		if(leilao.getMelhorOferta().get().getValor() < oferta.getValor()) {
+		if(leilao.getMelhorOferta().getValor() < oferta.getValor()) {
 			leilao.setMelhorOferta(oferta);
 			return true;
 		}
@@ -36,25 +34,23 @@ public class Gerenciador {
 	public String vender(Leilao leilao) {
 		try {
 			leilao.vender();
-			leiloes.remove(leilao);
-			return "Vendido para " + leilao.getMelhorOferta().get().getComprador().getNome();
+			leiloes.remove(leilao.getId());
+			return "Vendido para " + leilao.getMelhorOferta().getComprador().getNome();
 		} catch(Exception excecao) {
 			return excecao.getMessage();
 		}
 	}
 	
 	public boolean encerraLeilao(int id) {
-		for(int i=0; i<leiloes.size(); i++) {
-			if(leiloes.get(i).getId() == id) {
-				leiloes.remove(i);
-				return true;
-			}
+		if (leiloes.get(id) == null) {
+			return false;
 		}
-		return false;
+		leiloes.remove(id);
+		return true;
 	}
 	
-	public void addLeilao(Leilao leilao) {
-		leiloes.add(leilao);
+	public void addLeilao(int id, Leilao leilao) {
+		leiloes.put(id, leilao);
 	}
 	
 	public void addPessoa(Pessoa pessoa) {
