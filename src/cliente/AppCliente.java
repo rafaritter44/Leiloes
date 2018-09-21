@@ -1,4 +1,4 @@
-package Cliente;
+package cliente;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -25,7 +25,7 @@ public class AppCliente {
     	
     	System.out.println("--- Conectando ao Servidor ---");
 		Socket s = new Socket("localhost", porta);
-		System.out.println("--- Conexão Estabelecida com Sucesso ---");
+		System.out.println("--- Conexï¿½o Estabelecida com Sucesso ---");
 
 		ObjectOutputStream os = new ObjectOutputStream(s.getOutputStream());
 		ObjectInputStream is = new ObjectInputStream(s.getInputStream());
