@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Random;
 
 public class Produto implements Serializable, Comparable<Produto> {
 	
@@ -10,13 +11,12 @@ public class Produto implements Serializable, Comparable<Produto> {
 	private String nome;
 	private String idDono;
 	private boolean emLeilao;
-	private static int contador = 1;
+	private Random r;
 	public int idLeilao;
 	
 	public Produto(String nome) {
 		setNome(nome);
-		this.id = contador;
-		contador++;
+		this.id = r.nextInt(Integer.MAX_VALUE);
 	}
 
 	public int getId() { return id; }

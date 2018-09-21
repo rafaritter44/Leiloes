@@ -3,6 +3,8 @@ package model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Random;
+
 import servidor.Gerenciador;
 
 public class Leilao implements Serializable {
@@ -18,12 +20,12 @@ public class Leilao implements Serializable {
 	public LocalDateTime horaFinal;
 	private static final int TEMPO_LIMITE = 5;
 	private static final double TAXA_DE_VENDA = 0.05;
-	private static int contador = 1;
+	public Random r;
 	
 	public Leilao(Pessoa vendedor, Produto produto) {
 		status = "Ativo";
-		this.id = contador;
-		contador++;
+		this.id = r.nextInt(Integer.MAX_VALUE);
+		
 		this.vendedor = vendedor;
 		this.produto = produto;
 		produto.setEmLeilao(true);
