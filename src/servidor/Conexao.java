@@ -11,6 +11,7 @@ import model.Mensagem;
 import model.Oferta;
 import model.Pessoa;
 import model.Produto;
+import persistencia.GerenciadorDePersistencia;
 
 public class Conexao extends Thread {
     private Socket socket;
@@ -31,6 +32,7 @@ public class Conexao extends Thread {
         	
 
             while (true) {
+            	GerenciadorDePersistencia.gravar("dados.json", g);
             	os.reset();
                 Mensagem im = (Mensagem) is.readObject();
 //                System.out.println(im);
