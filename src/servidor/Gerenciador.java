@@ -61,6 +61,13 @@ public class Gerenciador {
 		pessoas.put(pessoa.getUsername(), pessoa);
 	}
 	
+	public boolean usernameExiste(String username) {
+		if (pessoas.get(username) != null) {
+			return true;
+		}
+		return false;
+	}
+	
 	public static double getReceitaDaEmpresa() {
 		return receitaDaEmpresa;
 	}

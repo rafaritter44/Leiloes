@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 
 public class AppCliente {
 
-	public static final int porta = 5555;
+	public static final int porta = 4444;
 	
 	public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException {
 
@@ -25,7 +25,7 @@ public class AppCliente {
     	
     	System.out.println("--- Conectando ao Servidor ---");
 		Socket s = new Socket("localhost", porta);
-		System.out.println("--- Conex�o Estabelecida com Sucesso ---");
+		System.out.println("--- Conexao Estabelecida com Sucesso ---");
 
 		ObjectOutputStream os = new ObjectOutputStream(s.getOutputStream());
 		ObjectInputStream is = new ObjectInputStream(s.getInputStream());

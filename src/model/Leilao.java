@@ -1,13 +1,16 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 import servidor.Gerenciador;
 
-public class Leilao {
-
+public class Leilao implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	private int id;
 	private Pessoa vendedor;
 	private Produto produto;
@@ -31,9 +34,9 @@ public class Leilao {
 	
 	public void vender() throws Exception {
 		if(tempoEsgotado())
-			throw new Exception("Tempo de leilão esgotado");
+			throw new Exception("Tempo de leilï¿½o esgotado");
 		if(!melhorOferta.isPresent())
-			throw new Exception("Nenhuma oferta realizada até o momento");
+			throw new Exception("Nenhuma oferta realizada atï¿½ o momento");
 		if(vendedor.removeProduto(produto)) {
 			Oferta ofertaVencedora = melhorOferta.get();
 			ofertaVencedora.getComprador().addProduto(produto);
@@ -42,7 +45,7 @@ public class Leilao {
 			vendedor.recebe(valorDaVenda - pagamentoPraEmpresa);
 			Gerenciador.depositaTaxaDeVenda(pagamentoPraEmpresa);
 		} else
-			throw new Exception("ERRO - O vendedor não possui esse produto");
+			throw new Exception("ERRO - O vendedor nï¿½o possui esse produto");
 	}
 	
 	public int getId() { return id; }
@@ -53,7 +56,7 @@ public class Leilao {
 	
 	public void setMelhorOferta(Oferta oferta) throws Exception {
 		if(tempoEsgotado())
-			throw new Exception("Tempo de leilão esgotado");
+			throw new Exception("Tempo de leilï¿½o esgotado");
 		melhorOferta = Optional.ofNullable(oferta);
 	}
 	

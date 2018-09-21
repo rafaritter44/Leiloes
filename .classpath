@@ -11,6 +11,6 @@
 	<classpathentry kind="lib" path="lib/commons-lang3-3.5-test-sources.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang3-3.5-tests.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang3-3.5.jar"/>
-	<classpathentry kind="lib" path="/Users/rafaritter44/git/Leiloes/lib/gson-2.8.5.jar"/>
+	<classpathentry kind="lib" path="lib/gson-2.8.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
