@@ -10,9 +10,9 @@ public class Pessoa implements Serializable {
 	
 	private String username;
 	private String nome;
-	private List<Produto> produtos;
+	public List<Produto> produtos;
 	private double saldo;
-	private CartaoDeCredito cartaoDeCredito;
+	public CartaoDeCredito cartaoDeCredito;
 	
 	public Pessoa(String username, String nome, double saldo, CartaoDeCredito cartaoDeCredito) {
 		this.username = username;
@@ -43,5 +43,11 @@ public class Pessoa implements Serializable {
 		return cartaoDeCredito != null
 				&& cartaoDeCredito.isValido();
 		}
+
+	@Override
+	public String toString() {
+		return "Pessoa [username=" + username + ", nome=" + nome + ", produtos=" + produtos + ", saldo=" + saldo
+				+ ", cartaoDeCredito=" + cartaoDeCredito + "]";
+	}
 
 }

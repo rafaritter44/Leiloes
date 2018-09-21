@@ -25,4 +25,9 @@ public class Produto implements Serializable {
 	public boolean estaAVenda() { return emLeilao; }
 	public void setEmLeilao(boolean emLeilao) { this.emLeilao = emLeilao; }
 
+	@Override
+	public String toString() {
+		return "Produto [id=" + id + ", nome=" + nome + ", idDono=" + idDono + ", emLeilao=" + emLeilao + "]";
+	}
+
 }

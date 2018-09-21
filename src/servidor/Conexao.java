@@ -28,21 +28,20 @@ public class Conexao extends Thread {
 
             while (true) {
                 Mensagem im = (Mensagem) is.readObject();
-                System.out.println(im);
+//                System.out.println(im);
                 
                 if (im.operacao.equals("ValidarUsuario")) {
                 	System.out.println("Validando Usuario: " + im.username);
                 	Mensagem om = new Mensagem("ValidarUsuario", username, "");
+            		username = im.username;
                 	
                 	if (g.usernameExiste(im.username)) {
-                		System.out.println("Usuario existente");
-                		username = im.username;
                 		om.args = "Existe"; 
                 	} else {
-                		System.out.println("Usuario inexistente");
                 		om.args = "NaoExiste";
                 	}
-                	System.out.println("Respondendo: " + om);
+
+//                	System.out.println("Respondendo: " + om);
                 	os.writeObject(om);
                 	continue;
                 }
@@ -54,6 +53,14 @@ public class Conexao extends Thread {
                 
                 else if (im.operacao.equals("Encerrar")) {
                     System.out.println("Encerrando conexao com usuario" + username);
+                	break;
+                }
+                
+                switch (im.operacao) {
+                case "ConsultarConta":
+                	Pessoa om = g.pessoas.get(username);
+                	System.out.println("Respondendo Objeto: " + om);
+                	os.writeObject(om);
                 	break;
                 }
             }

@@ -59,5 +59,11 @@ public class Leilao implements Serializable {
 			throw new Exception("Tempo de leil�o esgotado");
 		melhorOferta = Optional.ofNullable(oferta);
 	}
+
+	@Override
+	public String toString() {
+		return "Leilao [id=" + id + ", vendedor=" + vendedor + ", produto=" + produto + ", melhorOferta=" + melhorOferta
+				+ ", horaInicial=" + horaInicial + "]";
+	}
 	
 }

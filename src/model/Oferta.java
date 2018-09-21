@@ -17,4 +17,9 @@ public class Oferta implements Serializable {
 	public Pessoa getComprador() { return comprador; }
 	public double getValor() { return valor; }
 
+	@Override
+	public String toString() {
+		return "Oferta [comprador=" + comprador + ", valor=" + valor + "]";
+	}
+
 }

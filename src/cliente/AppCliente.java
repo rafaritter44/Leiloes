@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 
 public class AppCliente {
 
-	public static final int porta = 4444;
+	public static final int porta = 8888;
 	
 	public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException {
 
@@ -31,7 +31,7 @@ public class AppCliente {
 		ObjectInputStream is = new ObjectInputStream(s.getInputStream());
 		
 		InterfaceTexto inter = new InterfaceTexto(os, is);
-//		inter.menuPrincipal();
+		inter.menuPrincipal();
 
 		s.close();
     }

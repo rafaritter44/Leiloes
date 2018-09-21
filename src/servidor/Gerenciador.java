@@ -11,8 +11,8 @@ import model.Pessoa;
 
 public class Gerenciador {
 	
-	private List<Leilao> leiloes;
-	private Map<String, Pessoa> pessoas;
+	public List<Leilao> leiloes;
+	public Map<String, Pessoa> pessoas;
 	private static double receitaDaEmpresa;
 	
 	public Gerenciador() {
@@ -74,6 +74,11 @@ public class Gerenciador {
 	
 	public static void depositaTaxaDeVenda(double valor) {
 		receitaDaEmpresa += valor;
+	}
+
+	@Override
+	public String toString() {
+		return "Gerenciador [leiloes=" + leiloes + ", pessoas=" + pessoas + "]";
 	}
 
 }

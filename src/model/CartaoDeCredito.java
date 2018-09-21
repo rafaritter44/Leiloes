@@ -7,9 +7,9 @@ public class CartaoDeCredito implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private String numero;
-	private String bandeira;
-	private String cvv;
+	public String numero;
+	public String bandeira;
+	public String cvv;
 	
 	public CartaoDeCredito() {
 		geraAleatorio();
@@ -39,5 +39,10 @@ public class CartaoDeCredito implements Serializable {
 		int nCvv = 100;
 		nCvv += ThreadLocalRandom.current().nextInt(899);
 		this.cvv = Integer.toString(nCvv);
+	}
+
+	@Override
+	public String toString() {
+		return "CartaoDeCredito [numero=" + numero + ", bandeira=" + bandeira + ", cvv=" + cvv + "]";
 	}
 }
