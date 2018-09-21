@@ -10,14 +10,15 @@ public class Produto implements Serializable {
 	private String nome;
 	private String idDono;
 	private boolean emLeilao;
+	private static int contador = 1;
 	
-	public Produto(int id, String nome) {
-		setId(id);
+	public Produto(String nome) {
 		setNome(nome);
+		this.id = contador;
+		contador++;
 	}
 
 	public int getId() { return id; }
-	public void setId(int id) { this.id = id; }
 	public String getNome() { return nome; }
 	public void setNome(String nome) { this.nome = nome; }
 	public String getIdDono() { return idDono; }

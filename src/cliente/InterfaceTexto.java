@@ -49,6 +49,7 @@ public class InterfaceTexto {
 	}
 	
 	public void menuPrincipal() throws ClassNotFoundException, IOException {
+		os.reset();
 		String opcaoString = "0";
 		int opcaoInt = Integer.parseInt(opcaoString);
 		
@@ -134,11 +135,21 @@ public class InterfaceTexto {
 			}
 		}
 		
-		System.out.println("\n--------------------------------------------");
+		System.out.println("--------------------------------------------");
 	}
 	
-	public void adicionarProduto() {
-		
+	public void adicionarProduto() throws IOException {
+		System.out.println("\n--- ADICIONAR PRODUTO ---"
+				+ "\n--------------------------------------------"
+				+ "\nNome do Produto: ");
+		String nome = in.nextLine();
+
+		Produto p = new Produto(nome);
+		p.setIdDono(username);
+
+		Mensagem om = new Mensagem("AdicionarProduto", username, "");
+		os.writeObject(om);
+		os.writeObject(p);
 	}
 	
 	public void venderProduto() {
@@ -161,5 +172,4 @@ public class InterfaceTexto {
 
 		return new Pessoa(username, nome, 0.0, cartao);
 	}
-	
 }

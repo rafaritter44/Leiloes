@@ -7,6 +7,7 @@ import java.net.Socket;
 
 import model.Mensagem;
 import model.Pessoa;
+import model.Produto;
 
 public class Conexao extends Thread {
     private Socket socket;
@@ -17,7 +18,7 @@ public class Conexao extends Thread {
         this.socket = socket;
         this.g = g;
         username = "";
-        System.out.println("Nova conexao estabelecida em " + socket);
+//        System.out.println("Nova conexao estabelecida em " + socket);
     }
 
     public void run() {
@@ -27,6 +28,7 @@ public class Conexao extends Thread {
         	
 
             while (true) {
+            	os.reset();
                 Mensagem im = (Mensagem) is.readObject();
 //                System.out.println(im);
                 
@@ -52,7 +54,7 @@ public class Conexao extends Thread {
                 }
                 
                 else if (im.operacao.equals("Encerrar")) {
-                    System.out.println("Encerrando conexao com usuario" + username);
+                    System.out.println("Encerrando conexao com usuario: " + username);
                 	break;
                 }
                 
@@ -62,6 +64,11 @@ public class Conexao extends Thread {
                 	System.out.println("Respondendo Objeto: " + om);
                 	os.writeObject(om);
                 	break;
+                	
+                case "AdicionarProduto":
+                	Produto produtoAdicionado = (Produto) is.readObject();
+//                	System.out.println("Adicionando produto: " + produtoAdicionado);
+                	g.pessoas.get(username).addProduto(produtoAdicionado);
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
