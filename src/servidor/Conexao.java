@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import model.Leilao;
 import model.Mensagem;
+import model.Oferta;
 import model.Pessoa;
 import model.Produto;
 
@@ -142,8 +143,38 @@ public class Conexao extends Thread {
                 	}
                 	os.writeObject(aVenda);
                 	
-                	//Mensagem darLance = (Mensagem) is.readObject();
+                	Mensagem detalhesLeilao = (Mensagem) is.readObject();
+                	Integer opInt = Integer.parseInt(detalhesLeilao.args);
+                	if(opInt == 0) {
+                		break;
+                	}
                 	
+                	Leilao leilaoLance = g.leiloes.get(opInt);
+                	os.writeObject(leilaoLance);
+                	
+                	detalhesLeilao = (Mensagem) is.readObject();
+                	double opDouble = Double.parseDouble(detalhesLeilao.args);
+                	
+                	if ((leilaoLance.melhorOferta != null && opDouble <= leilaoLance.melhorOferta.getValor()) || opDouble <= 0) {
+                		detalhesLeilao = new Mensagem("ResultadoOferta", username, "ValorInvalido");
+                		os.writeObject(detalhesLeilao);
+                		break;
+                	} else {
+                		Pessoa comprador = g.pessoas.get(username);
+                		Oferta o = new Oferta(comprador, opDouble);
+                		try {
+                			leilaoLance.setMelhorOferta(o);
+                			detalhesLeilao = new Mensagem("ResultadoOferta", username, "true");
+                			os.writeObject(detalhesLeilao);
+                		} catch(Exception excecao) {
+                			detalhesLeilao = new Mensagem("ResultadoOferta", username, "PrazoEncerrado");
+                			os.writeObject(detalhesLeilao);
+                    		break;
+                		}
+                	}
+                	
+                	
+                	break;
                 }
             }
         } catch (IOException | ClassNotFoundException e) {

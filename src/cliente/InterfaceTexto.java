@@ -351,7 +351,7 @@ public class InterfaceTexto {
 
 		for(Leilao l : aVenda.values()) {
 			Produto p = l.getProduto();
-			System.out.print(p.getId() + "\t");
+			System.out.print(l.getId() + "\t");
 			if (l.getMelhorOferta() == null) {
 				System.out.print("-----");
 			} else {
@@ -361,7 +361,7 @@ public class InterfaceTexto {
 		}
 		
 		System.out.println("--------------------------------------------\n"
-				+ "Digite o ID do produto para detalhes:");
+				+ "Digite o ID do produto para fazer uma oferta ou 0 para retorar ao menu:");
 		
 		System.out.print("> ");
 		String opcaoString = in.nextLine();
@@ -372,6 +372,66 @@ public class InterfaceTexto {
 			opcaoString = in.nextLine();
 		}
 		
+		int opcaoInt = Integer.parseInt(opcaoString);
+		
+		if (opcaoInt == 0) {
+			System.out.println("\n--- Cancelado - Retornando ao Menu Principal ---");
+			om = new Mensagem("SolicitaLeilao", username, "0");
+			os.writeObject(om);
+			return;
+		} else if (aVenda.get(opcaoInt) == null) {
+			System.out.println("\n--- ERRO: Produto nao encontrado ---");
+			om = new Mensagem("SolicitaLeilao", username, "0");
+			os.writeObject(om);
+			return;
+		}
+		
+		Leilao l = aVenda.get(opcaoInt);
+		om = new Mensagem("SolicitaLeilao", username, Integer.toString(l.getId()));
+		os.writeObject(om);
+		l = (Leilao) is.readObject();
+		Produto p = l.getProduto();
+		
+		System.out.print("\n--- DETALHES DO LEILAO ---\n"
+				+ "Hora atual: " + LocalDateTime.now()
+				+ "\n--------------------------------------------"
+				+ "\n--- Produto: " + p.getNome()
+				+ "\n--- Hora inicial: " + l.getHoraInicial()
+				+ "\n--- Tempo Restante (minutos): " + l.tempoRestante()
+				+ "\n--- Melhor Oferta: ");
+		
+		if (l.melhorOferta == null) {
+			System.out.println("Sem ofertas ate o momento");
+		} else {
+			System.out.println("R$ " + l.getMelhorOferta().getValor());
+		}
+		System.out.println("--------------------------------------------");
+		
+		
+		os.reset();
+		System.out.println("\n--- Informe o valor da sua oferta (ou 0 para cancelar): ");
+
+		System.out.print("> R$ ");
+		opcaoString = in.nextLine();
+		
+		while(!StringUtils.isNumeric(opcaoString)){
+			System.out.println("--- ERRO: Insira somente o valor da oferta ---");
+			System.out.print("> R$ ");
+			opcaoString = in.nextLine();
+		}
+		
+		om = new Mensagem("OpcaoDetalhes", username, opcaoString);
+		os.writeObject(om);
+		
+		Mensagem im = (Mensagem) is.readObject();
+		if (im.args.equals("true")) {
+			System.out.println("--- Lance adicionado com sucesso ---");
+		} else if (im.args.equals("PrazoEncerrado")) {
+			System.out.println("ERRO: Prazo do leilao encerrado");
+		} else if (im.args.equals("ValorInvalido")) {
+			System.out.println("ERRO: Valor do lance invalido");
+		}
+	
 	}
 	
 	public Pessoa cadastrarUsuario() {
