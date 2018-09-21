@@ -291,6 +291,7 @@ public class InterfaceTexto {
 			System.out.println("\n--- Selecione uma opção: "
 					+ "\n1) Recarregar Dados"
 					+ "\n2) Finalizar Leilao"
+					+ "\n3) Cancelar Leilao"
 					+ "\n9) Menu Principal");
 
 			System.out.print("> ");
@@ -329,6 +330,9 @@ public class InterfaceTexto {
 			else if(opcaoInt == 2){
 				om = new Mensagem("OpcaoDetalhes", username, "2");
 			}
+			else if(opcaoInt == 3){
+				om = new Mensagem("OpcaoDetalhes", username, "3");
+			}
 			else if(opcaoInt == 9){
 				om = new Mensagem("OpcaoDetalhes", username, "9");
 				break;
@@ -336,7 +340,37 @@ public class InterfaceTexto {
 		}
 	}
 	
-	public void comprarProduto() {
+	public void comprarProduto() throws IOException, ClassNotFoundException {
+		Mensagem om = new Mensagem("ComprarProduto", username, "");
+		os.writeObject(om);
+		
+		HashMap<Integer, Leilao> aVenda = (HashMap<Integer,Leilao>) is.readObject();
+		
+		System.out.println("\n--- PRODUTOS A VENDA ---"
+				+ "\n--------------------------------------------");
+
+		for(Leilao l : aVenda.values()) {
+			Produto p = l.getProduto();
+			System.out.print(p.getId() + "\t");
+			if (l.getMelhorOferta() == null) {
+				System.out.print("-----");
+			} else {
+				System.out.print("R$ " + l.getMelhorOferta().getValor());
+			}
+			System.out.println("\t" + p.getNome());
+		}
+		
+		System.out.println("--------------------------------------------\n"
+				+ "Digite o ID do produto para detalhes:");
+		
+		System.out.print("> ");
+		String opcaoString = in.nextLine();
+		
+		while(!StringUtils.isNumeric(opcaoString)){
+			System.out.println("--- ERRO: Insira somente o numero do produto ---");
+			System.out.print("> ");
+			opcaoString = in.nextLine();
+		}
 		
 	}
 	

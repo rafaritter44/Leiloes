@@ -125,12 +125,25 @@ public class Conexao extends Thread {
                 			os.writeObject(leilaoEnviado);
                 		} else if (opcaoDetalhes.args.equals("2")) {
                 			// TODO: Encerrar Leilao
+                		} else if (opcaoDetalhes.args.equals("3")) {
+                			// TODO: Cancelar Leilao
                 		} else if (opcaoDetalhes.args.equals("9")) {
                 			break;
                 		}
                 	}
-                	
                 	break;
+                	
+                case "ComprarProduto":
+                	HashMap<Integer, Leilao> aVenda = new HashMap<Integer, Leilao>();
+                	for (Leilao l : g.leiloes.values()) {
+                		if (l.status.equals("Ativo") && !l.tempoEsgotado()) {
+                			aVenda.put(l.getId(), l);
+                		}
+                	}
+                	os.writeObject(aVenda);
+                	
+                	//Mensagem darLance = (Mensagem) is.readObject();
+                	
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
